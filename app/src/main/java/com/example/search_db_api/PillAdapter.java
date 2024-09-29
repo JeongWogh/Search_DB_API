@@ -47,9 +47,9 @@ public class PillAdapter extends RecyclerView.Adapter<PillAdapter.PillViewHolder
 
         public PillViewHolder(@NonNull View itemView) {
             super(itemView);
-            itemName = itemView.findViewById(R.id.itemName);
-            efcyQesitm = itemView.findViewById(R.id.efcyQesitm);
-            itemImage = itemView.findViewById(R.id.itemImage);
+            itemName = itemView.findViewById(R.id.itemName);  // XML에서 정의한 ID
+            efcyQesitm = itemView.findViewById(R.id.efcyQesitm);  // XML에서 정의한 ID
+            itemImage = itemView.findViewById(R.id.itemImage);  // XML에서 정의한 ID
         }
     }
 

@@ -1,6 +1,9 @@
 package com.example.search_db_api;
 
-public class Pill {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Pill implements Parcelable {
     private String itemName;
     private int itemSeq;
     private String efcyQesitm;
@@ -9,7 +12,48 @@ public class Pill {
     private String itemImage;
     private String etcotc;
 
-    // Getter and Setter methods
+    public Pill() {
+    }
+
+    protected Pill(Parcel in) {
+        itemName = in.readString();
+        itemSeq = in.readInt();
+        efcyQesitm = in.readString();
+        atpnQesitm = in.readString();
+        seQesitm = in.readString();
+        itemImage = in.readString();
+        etcotc = in.readString();
+    }
+
+    public static final Creator<Pill> CREATOR = new Creator<Pill>() {
+        @Override
+        public Pill createFromParcel(Parcel in) {
+            return new Pill(in);
+        }
+
+        @Override
+        public Pill[] newArray(int size) {
+            return new Pill[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(itemName);
+        dest.writeInt(itemSeq);
+        dest.writeString(efcyQesitm);
+        dest.writeString(atpnQesitm);
+        dest.writeString(seQesitm);
+        dest.writeString(itemImage);
+        dest.writeString(etcotc);
+    }
+
+    // Getters and Setters
     public String getItemName() {
         return itemName;
     }
