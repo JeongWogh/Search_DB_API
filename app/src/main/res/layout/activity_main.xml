@@ -49,12 +49,6 @@
             android:text="어지러움" />
 
         <CheckBox
-            android:id="@+id/nauseaCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="메스꺼움" />
-
-        <CheckBox
             android:id="@+id/insomniaCheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -79,4 +73,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recentSearchesRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"/>
 </LinearLayout>

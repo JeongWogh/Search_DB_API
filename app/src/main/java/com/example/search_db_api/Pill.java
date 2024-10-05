@@ -12,9 +12,11 @@ public class Pill implements Parcelable {
     private String itemImage;
     private String etcotc;
 
+    // 기본 생성자
     public Pill() {
     }
 
+    // Parcelable 인터페이스를 위한 생성자
     protected Pill(Parcel in) {
         itemName = in.readString();
         itemSeq = in.readInt();
@@ -25,6 +27,7 @@ public class Pill implements Parcelable {
         etcotc = in.readString();
     }
 
+    // Parcelable 인터페이스 메소드
     public static final Creator<Pill> CREATOR = new Creator<Pill>() {
         @Override
         public Pill createFromParcel(Parcel in) {
@@ -53,7 +56,7 @@ public class Pill implements Parcelable {
         dest.writeString(etcotc);
     }
 
-    // Getters and Setters
+    // Getter 및 Setter 메소드
     public String getItemName() {
         return itemName;
     }

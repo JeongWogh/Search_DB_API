@@ -1,5 +1,8 @@
 package com.example.search_db_api;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import java.util.List;
 
 import retrofit2.Call;
@@ -23,4 +26,11 @@ public interface ApiService {
     // 특정 약 정보 가져오기
     @GET("api/pills/{itemSeq}")
     Call<Pill> getPillById(@Path("itemSeq") int itemSeq);
+
+    // 만약 서버가 단일 객체를 반환한다면
+    @GET("/api/pills/search")
+    Call<Pill> searchPill(  // 단일 객체로 변경
+                            @Query("symptom") String symptom,
+                            @Query("selectedSymptoms") List<String> selectedSymptoms
+    );
 }
