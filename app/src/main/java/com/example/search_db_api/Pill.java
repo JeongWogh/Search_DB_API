@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 public class Pill implements Parcelable {
     private String itemName;
-    private int itemSeq;
+    private String itemSeq; // itemSeq를 String 타입으로 변경
     private String efcyQesitm;
     private String atpnQesitm;
     private String seQesitm;
@@ -19,7 +19,7 @@ public class Pill implements Parcelable {
     // Parcelable 인터페이스를 위한 생성자
     protected Pill(Parcel in) {
         itemName = in.readString();
-        itemSeq = in.readInt();
+        itemSeq = in.readString(); // String으로 변경
         efcyQesitm = in.readString();
         atpnQesitm = in.readString();
         seQesitm = in.readString();
@@ -48,7 +48,7 @@ public class Pill implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(itemName);
-        dest.writeInt(itemSeq);
+        dest.writeString(itemSeq); // String으로 변경
         dest.writeString(efcyQesitm);
         dest.writeString(atpnQesitm);
         dest.writeString(seQesitm);
@@ -65,11 +65,11 @@ public class Pill implements Parcelable {
         this.itemName = itemName;
     }
 
-    public int getItemSeq() {
+    public String getItemSeq() {
         return itemSeq;
     }
 
-    public void setItemSeq(int itemSeq) {
+    public void setItemSeq(String itemSeq) {
         this.itemSeq = itemSeq;
     }
 
