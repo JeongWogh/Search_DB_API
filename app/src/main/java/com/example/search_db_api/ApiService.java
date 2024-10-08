@@ -22,18 +22,19 @@ public interface ApiService {
             @Query("selectedSymptoms") List<String> selectedSymptoms  // 체크박스에서 선택한 증상들
     );
 
+    // 약물 정보를 추가하는 POST 요청
     @POST("api/pills/add")
-    Call<ResponseBody> addPill(@Body Pill pill);
+    Call<ResponseBody> addPill(@Body Pill pill);  // 요청 본문에 Pill 객체를 담아 서버로 전송
 
-    // 특정 증상에 맞는 약 검색
+    // 특정 증상에 맞는 약 검색 (단일 텍스트 검색어를 기반으로 검색)
     @GET("api/pills/search")
     Call<List<Pill>> searchPills(@Query("symptom") String symptom);
 
-    // 특정 약 정보 가져오기
+    // 특정 약의 상세 정보를 itemSeq로 가져오기
     @GET("api/pills/{itemSeq}")
-    Call<Pill> getPillById(@Path("itemSeq") int itemSeq);
+    Call<Pill> getPillById(@Path("itemSeq") int itemSeq);  // 경로 매개변수로 itemSeq 사용
 
-    // 만약 서버가 단일 객체를 반환한다면
+    // 서버가 단일 객체를 반환하는 경우를 위한 API
     @GET("/api/pills/search")
     Call<Pill> searchPill(  // 단일 객체로 변경
                             @Query("symptom") String symptom,
