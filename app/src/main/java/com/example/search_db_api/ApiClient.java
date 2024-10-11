@@ -6,11 +6,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
 
     // 서버의 기본 URL 설정
-    // 가상 머신을 사용할 때는 아래 URL 사용 (Android Emulator에서 로컬 호스트에 접근하기 위한 주소)
+    // Android Emulator(가상 머신)에서 로컬 호스트에 접근하기 위한 주소
+    // 실제 사용 시 환경에 따라 URL을 바꾸어야 함
     // private static final String BASE_URL = "http://10.0.2.2:5000/";
 
-    // 실제 폰을 사용할 때 서버 주소 (현재 연결된 Wi-Fi 네트워크에서 서버의 IP 주소)
-    private static final String BASE_URL = "http://10.100.1.110:5000/";
+    // 실제 디바이스를 사용할 때 서버 주소
+    // 현재 연결된 Wi-Fi 네트워크에서 서버의 IP 주소를 입력해야 함
+    // 서버의 IP 주소는 상황에 따라 달라지므로 수시로 변경해 사용
+    private static final String BASE_URL = "http://10.100.1.99:5000/";
 
     // 집에서 서버에 접근할 때 사용하는 주소
     // private static final String BASE_URL = "http://192.168.1.9:5000/";
@@ -25,7 +28,7 @@ public class ApiClient {
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL) // 서버의 기본 URL 설정
                     .addConverterFactory(GsonConverterFactory.create()) // JSON 데이터를 변환하기 위해 Gson을 사용
-                    .build();
+                    .build(); // Retrofit 객체 빌드 및 생성
         }
         return retrofit; // 생성된 retrofit 객체 반환
     }
