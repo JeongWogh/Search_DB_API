@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
 
 import okhttp3.ResponseBody;
@@ -65,20 +66,33 @@ public class PillDetailActivity extends AppCompatActivity {
 
     // 약물을 서버에 추가하는 메서드
     private void addMedicationToDatabase() {
+        // 기기의 고유 ID를 가져옴
+        String userId = DeviceUtil.getDeviceId(this);
+        Log.d("PillDetailActivity", "기기 ID: " + userId);
+
+        // 서버로 보낼 JSON 객체 생성
+        JsonObject pillJson = new JsonObject();
+        pillJson.addProperty("user_id", userId);
+        pillJson.addProperty("itemSeq", pill.getItemSeq());
+        pillJson.addProperty("itemName", pill.getItemName());
+        pillJson.addProperty("efcyQesitm", pill.getEfcyQesitm());
+        pillJson.addProperty("atpnQesitm", pill.getAtpnQesitm());
+        pillJson.addProperty("seQesitm", pill.getSeQesitm());
+        pillJson.addProperty("etcotc", pill.getEtcotc());
+        pillJson.addProperty("itemImage", pill.getItemImage());
+
         // ApiService를 사용하여 API 호출을 준비
-        ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        Call<ResponseBody> call = apiService.addPill(pill);
+        ApiService apiService = ApiClient.getApiService();
+        Call<ResponseBody> call = apiService.addPill(pillJson);
 
         // API 호출을 비동기적으로 실행
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                // 서버 응답이 성공적일 경우
                 if (response.isSuccessful()) {
                     Toast.makeText(getApplicationContext(), "약물이 성공적으로 추가되었습니다.", Toast.LENGTH_SHORT).show();
                     Log.d("PillDetailActivity", "약물 추가 성공");
                 } else {
-                    // 서버 응답이 실패한 경우
                     Toast.makeText(getApplicationContext(), "약물 추가 실패: " + response.message(), Toast.LENGTH_SHORT).show();
                     Log.e("PillDetailActivity", "약물 추가 실패: " + response.message());
                 }
@@ -86,10 +100,10 @@ public class PillDetailActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                // 네트워크 오류 또는 서버 오류가 발생한 경우
                 Toast.makeText(getApplicationContext(), "서버 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e("PillDetailActivity", "서버 오류: " + t.getMessage(), t);
             }
         });
     }
+
 }
