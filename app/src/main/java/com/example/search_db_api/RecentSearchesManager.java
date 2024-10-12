@@ -9,55 +9,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecentSearchesManager {
-
-    // SharedPreferences 파일 이름과 검색어를 저장할 키 값
     private static final String PREF_NAME = "RecentSearches";
     private static final String KEY_RECENT_SEARCHES = "recent_searches";
-    private static final int MAX_RECENT_SEARCHES = 5;  // 최대 저장할 검색어 수
+    private static final int MAX_RECENT_SEARCHES = 5;
 
     private SharedPreferences sharedPreferences;
     private Gson gson;
 
-    // 생성자: SharedPreferences와 Gson 객체 초기화
     public RecentSearchesManager(Context context) {
         sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         gson = new Gson();
     }
 
-    // 새로운 검색어를 추가하는 메서드
     public void addSearchQuery(String query) {
-        List<String> recentSearches = getRecentSearches();  // 기존 검색어 리스트를 가져옴
+        List<String> recentSearches = getRecentSearches();
 
-        // 중복된 검색어 제거
+        // 중복 제거
         recentSearches.remove(query);
 
-        // 새로운 검색어를 리스트의 맨 앞에 추가
+        // 최근 검색어를 리스트의 첫 번째로 추가
         recentSearches.add(0, query);
 
-        // 최근 검색어 리스트의 최대 개수를 유지 (5개 초과 시 마지막 검색어 제거)
+        // 최대 개수 유지
         while (recentSearches.size() > MAX_RECENT_SEARCHES) {
             recentSearches.remove(recentSearches.size() - 1);
         }
 
-        // 업데이트된 리스트를 SharedPreferences에 저장
+        // 저장
         saveRecentSearches(recentSearches);
     }
 
-    // 최근 검색어 리스트를 반환하는 메서드
     public List<String> getRecentSearches() {
-        // 저장된 검색어 리스트를 JSON 형식으로 가져옴
         String json = sharedPreferences.getString(KEY_RECENT_SEARCHES, null);
         if (json == null) {
-            return new ArrayList<>();  // 저장된 값이 없으면 빈 리스트 반환
+            return new ArrayList<>();
         }
-        // JSON 문자열을 List<String> 형식으로 변환
         Type type = new TypeToken<List<String>>() {}.getType();
         return gson.fromJson(json, type);
     }
 
-    // 최근 검색어 리스트를 SharedPreferences에 저장하는 메서드
     private void saveRecentSearches(List<String> recentSearches) {
-        // 리스트를 JSON 형식으로 변환하여 저장
         String json = gson.toJson(recentSearches);
         sharedPreferences.edit().putString(KEY_RECENT_SEARCHES, json).apply();
     }
