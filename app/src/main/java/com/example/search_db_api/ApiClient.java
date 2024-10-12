@@ -13,10 +13,10 @@ public class ApiClient {
     // 실제 디바이스를 사용할 때 서버 주소
     // 현재 연결된 Wi-Fi 네트워크에서 서버의 IP 주소를 입력해야 함
     // 서버의 IP 주소는 상황에 따라 달라지므로 수시로 변경해 사용
-    private static final String BASE_URL = "http://10.100.1.99:5000/";
+//    private static final String BASE_URL = "http://10.100.1.99:5000/";
 
     // 집에서 서버에 접근할 때 사용하는 주소
-    // private static final String BASE_URL = "http://192.168.1.9:5000/";
+     private static final String BASE_URL = "http://192.168.1.6:5000/";
 
     // Retrofit 객체를 저장할 변수
     private static Retrofit retrofit;

@@ -8,13 +8,15 @@ public class PillDataStore {
     // PillDataStore의 단일 인스턴스를 저장할 변수 (싱글톤 패턴 적용)
     private static PillDataStore instance;
 
-    // Pill 객체를 저장할 리스트
-    private List<Pill> pillList;
+    // 일반의약품(OTC)과 전문의약품(ETC) 리스트를 별도로 저장할 변수
+    private List<Pill> otcPillList;  // 일반의약품 리스트
+    private List<Pill> etcPillList;  // 전문의약품 리스트
 
-    // 생성자: pillList를 ArrayList로 초기화
+    // 생성자: 각 리스트를 ArrayList로 초기화
     // 외부에서 객체 생성을 막기 위해 private으로 설정
     private PillDataStore() {
-        pillList = new ArrayList<>();
+        otcPillList = new ArrayList<>();
+        etcPillList = new ArrayList<>();
     }
 
     // 싱글톤 패턴을 사용하여 PillDataStore의 인스턴스를 반환
@@ -26,15 +28,43 @@ public class PillDataStore {
         return instance;
     }
 
-    // pillList를 반환하는 메서드
-    // 이 메서드를 통해 저장된 약물 리스트에 접근할 수 있음
-    public List<Pill> getPillList() {
-        return pillList;
+    // 일반의약품(OTC) 리스트를 반환하는 메서드
+    public List<Pill> getOtcPillList() {
+        return otcPillList;
     }
 
-    // pillList를 설정하는 메서드
-    // 새로운 약물 리스트를 설정하거나 업데이트할 때 사용
-    public void setPillList(List<Pill> pillList) {
-        this.pillList = pillList;
+    // 전문의약품(ETC) 리스트를 반환하는 메서드
+    public List<Pill> getEtcPillList() {
+        return etcPillList;
+    }
+
+    // 일반의약품(OTC) 리스트를 설정하는 메서드
+    public void setOtcPillList(List<Pill> otcPillList) {
+        this.otcPillList = otcPillList;
+    }
+
+    // 전문의약품(ETC) 리스트를 설정하는 메서드
+    public void setEtcPillList(List<Pill> etcPillList) {
+        this.etcPillList = etcPillList;
+    }
+
+    // 일반의약품 리스트에 약물을 추가하는 메서드
+    public void addOtcPill(Pill pill) {
+        this.otcPillList.add(pill);
+    }
+
+    // 전문의약품 리스트에 약물을 추가하는 메서드
+    public void addEtcPill(Pill pill) {
+        this.etcPillList.add(pill);
+    }
+
+    // 일반의약품 리스트를 초기화하는 메서드
+    public void clearOtcPillList() {
+        this.otcPillList.clear();
+    }
+
+    // 전문의약품 리스트를 초기화하는 메서드
+    public void clearEtcPillList() {
+        this.etcPillList.clear();
     }
 }
