@@ -6,10 +6,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,6 +25,8 @@ public class PillDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pill_details);
 
+        Log.d("PillDetailActivity", "Activity 시작됨");
+
         // 인텐트에서 전달된 Pill 객체 가져오기
         pill = getIntent().getParcelableExtra("selectedPill");
         if (pill == null) {
@@ -31,6 +34,8 @@ public class PillDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "약 정보를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
             finish();  // 객체가 null인 경우, 액티비티 종료
             return;
+        } else {
+            Log.d("PillDetailActivity", "Pill 객체가 정상적으로 로드됨: " + pill.getItemName());
         }
 
         // UI 요소 찾기 (각 약물의 정보를 표시할 뷰들)
@@ -48,9 +53,11 @@ public class PillDetailActivity extends AppCompatActivity {
         atpnQesitmTextView.setText("주의사항: " + pill.getAtpnQesitm());
         seQesitmTextView.setText("부작용: " + pill.getSeQesitm());
         etcotcTextView.setText("분류: " + pill.getEtcotc());
+        Log.d("PillDetailActivity", "UI 요소 설정 완료");
 
         // Picasso를 사용하여 약물 이미지 로딩
         Picasso.get().load(pill.getItemImage()).into(itemImageView);
+        Log.d("PillDetailActivity", "이미지 로드 완료");
 
         // "복용 중인 약 추가" 버튼 클릭 리스너 설정
         addMedicationButton.setOnClickListener(v -> addMedicationToDatabase());
@@ -58,33 +65,20 @@ public class PillDetailActivity extends AppCompatActivity {
 
     // 약물을 서버에 추가하는 메서드
     private void addMedicationToDatabase() {
-        // 기기의 고유 ID를 가져옴
-        String userId = DeviceUtil.getDeviceId(this);
-        Log.d("PillDetailActivity", "기기 ID: " + userId);
-
-        // 서버로 보낼 JSON 객체 생성
-        JsonObject pillJson = new JsonObject();
-        pillJson.addProperty("user_id", userId);
-        pillJson.addProperty("itemSeq", pill.getItemSeq());
-        pillJson.addProperty("itemName", pill.getItemName());
-        pillJson.addProperty("efcyQesitm", pill.getEfcyQesitm());
-        pillJson.addProperty("atpnQesitm", pill.getAtpnQesitm());
-        pillJson.addProperty("seQesitm", pill.getSeQesitm());
-        pillJson.addProperty("etcotc", pill.getEtcotc());
-        pillJson.addProperty("itemImage", pill.getItemImage());
-
         // ApiService를 사용하여 API 호출을 준비
-        ApiService apiService = ApiClient.getApiService();
-        Call<ResponseBody> call = apiService.addPill(pillJson);
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        Call<ResponseBody> call = apiService.addPill(pill);
 
         // API 호출을 비동기적으로 실행
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                // 서버 응답이 성공적일 경우
                 if (response.isSuccessful()) {
                     Toast.makeText(getApplicationContext(), "약물이 성공적으로 추가되었습니다.", Toast.LENGTH_SHORT).show();
                     Log.d("PillDetailActivity", "약물 추가 성공");
                 } else {
+                    // 서버 응답이 실패한 경우
                     Toast.makeText(getApplicationContext(), "약물 추가 실패: " + response.message(), Toast.LENGTH_SHORT).show();
                     Log.e("PillDetailActivity", "약물 추가 실패: " + response.message());
                 }
@@ -92,11 +86,10 @@ public class PillDetailActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // 네트워크 오류 또는 서버 오류가 발생한 경우
                 Toast.makeText(getApplicationContext(), "서버 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e("PillDetailActivity", "서버 오류: " + t.getMessage(), t);
             }
         });
     }
-
-
 }
