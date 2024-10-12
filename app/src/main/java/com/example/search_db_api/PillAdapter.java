@@ -17,7 +17,7 @@ public class PillAdapter extends RecyclerView.Adapter<PillAdapter.PillViewHolder
     // RecyclerView에 표시할 약물 리스트를 저장하는 변수
     private List<Pill> pillList;
 
-    // 생성자: 표시할 약물 리스트를 받아옴
+    // 생성자: 표시할 약물 리스트를 받아와서 초기화
     public PillAdapter(List<Pill> pillList) {
         this.pillList = pillList;
     }
