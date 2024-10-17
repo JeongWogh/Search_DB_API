@@ -91,18 +91,24 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Retrofit API 호출
-        Call<List<Pill>> call = apiService.searchPills(query, selectedSymptoms);
-        call.enqueue(new Callback<List<Pill>>() {
+        Call<PillResponse> call = apiService.searchPills(query, selectedSymptoms);
+        call.enqueue(new Callback<PillResponse>() {
             @Override
-            public void onResponse(Call<List<Pill>> call, Response<List<Pill>> response) {
+            public void onResponse(Call<PillResponse> call, Response<PillResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<Pill> searchResults = response.body(); // 검색 결과 받아오기
-                    if (!searchResults.isEmpty()) {
-                        PillDataStore.getInstance().setPillList(searchResults); // 검색 결과를 데이터 저장소에 저장
-                        Intent intent = new Intent(MainActivity.this, SearchResultsActivity.class); // 검색 결과 화면으로 이동
-                        startActivity(intent);
+                    PillResponse pillResponse = response.body();  // 전체 응답 객체를 받아옴
+
+                    if (pillResponse.isSuccess() && pillResponse.getData() != null) {
+                        List<Pill> searchResults = pillResponse.getData();  // 실제 약물 리스트
+                        if (!searchResults.isEmpty()) {
+                            PillDataStore.getInstance().setPillList(searchResults); // 검색 결과를 데이터 저장소에 저장
+                            Intent intent = new Intent(MainActivity.this, SearchResultsActivity.class); // 검색 결과 화면으로 이동
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(MainActivity.this, "No results found", Toast.LENGTH_SHORT).show(); // 검색 결과 없음 알림
+                        }
                     } else {
-                        Toast.makeText(MainActivity.this, "No results found", Toast.LENGTH_SHORT).show(); // 검색 결과 없음 알림
+                        Toast.makeText(MainActivity.this, "Error: " + pillResponse.getMessage(), Toast.LENGTH_SHORT).show(); // 에러 메시지 표시
                     }
                 } else {
                     Toast.makeText(MainActivity.this, "Error: " + response.message(), Toast.LENGTH_SHORT).show(); // 에러 메시지 표시
@@ -110,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Pill>> call, Throwable t) {
+            public void onFailure(Call<PillResponse> call, Throwable t) {
                 Log.e("SearchPills", "Network request failed", t); // 네트워크 요청 실패 로그
                 Toast.makeText(MainActivity.this, "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show(); // 네트워크 오류 알림
             }
